@@ -16,6 +16,8 @@ LICENSE_PLATE_PATTERNS = {
 
 
 class InsurancePolicySerializer(serializers.ModelSerializer):
+    expiration_date = serializers.DateField(format="%d-%m-%Y")
+
     class Meta:
         model = InsurancePolicy
         fields = ["id", "company_name", "expiration_date"]
@@ -34,6 +36,15 @@ class VehiclesSerializer(serializers.ModelSerializer):
             "license_plate",
             "insurance_policy",
         ]
+
+        extra_kwargs = {
+            "vehicle_type": {"required": True},
+            "brand": {"required": True},
+            "model": {"required": True},
+            "color": {"required": True},
+            "license_plate": {"required": True},
+            "insurance_policy": {"required": True},
+        }
 
     def create(self, validated_data):
         insurance_policy_data = validated_data.pop("insurance_policy")
