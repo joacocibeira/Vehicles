@@ -1,0 +1,423 @@
+openapi: 3.0.3
+info:
+  title: Vehicle access
+  version: 0.0.0
+paths:
+  /api/vehicles/:
+    get:
+      operationId: api_vehicles_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVehiclesList'
+          description: ''
+    post:
+      operationId: api_vehicles_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicles'
+          description: ''
+  /api/vehicles/{license_plate}/:
+    get:
+      operationId: api_vehicles_retrieve
+      description: |-
+        Retrieve a model instance by vehicle type and license plate instead of the
+        PK
+      parameters:
+      - in: path
+        name: license_plate
+        schema:
+          type: string
+        description: A unique value identifying this vehicles.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicles'
+          description: ''
+    put:
+      operationId: api_vehicles_update
+      parameters:
+      - in: path
+        name: license_plate
+        schema:
+          type: string
+        description: A unique value identifying this vehicles.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicles'
+          description: ''
+    patch:
+      operationId: api_vehicles_partial_update
+      parameters:
+      - in: path
+        name: license_plate
+        schema:
+          type: string
+        description: A unique value identifying this vehicles.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicles'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicles'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicles'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicles'
+          description: ''
+    delete:
+      operationId: api_vehicles_destroy
+      parameters:
+      - in: path
+        name: license_plate
+        schema:
+          type: string
+        description: A unique value identifying this vehicles.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    InsurancePolicy:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        company_name:
+          type: string
+          maxLength: 100
+        expiration_date:
+          type: string
+          format: date
+      required:
+      - company_name
+      - expiration_date
+      - id
+    PaginatedVehiclesList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vehicles'
+    PatchedVehicles:
+      type: object
+      properties:
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleTypeEnum'
+        brand:
+          type: string
+          maxLength: 100
+        model:
+          type: string
+          maxLength: 100
+        color:
+          type: string
+          maxLength: 50
+        license_plate:
+          type: string
+          maxLength: 20
+        insurance_policy:
+          $ref: '#/components/schemas/InsurancePolicy'
+    VehicleTypeEnum:
+      enum:
+      - auto
+      - motocicleta
+      - bicicleta
+      - camioneta
+      - yate
+      - velero
+      - otro
+      type: string
+      description: |-
+        * `auto` - Auto
+        * `motocicleta` - Motocicleta
+        * `bicicleta` - Bicicleta
+        * `camioneta` - Camioneta
+        * `yate` - Yate
+        * `velero` - Velero
+        * `otro` - Otro
+    Vehicles:
+      type: object
+      properties:
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleTypeEnum'
+        brand:
+          type: string
+          maxLength: 100
+        model:
+          type: string
+          maxLength: 100
+        color:
+          type: string
+          maxLength: 50
+        license_plate:
+          type: string
+          maxLength: 20
+        insurance_policy:
+          $ref: '#/components/schemas/InsurancePolicy'
+      required:
+      - brand
+      - color
+      - insurance_policy
+      - license_plate
+      - model
+      - vehicle_type
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

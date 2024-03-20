@@ -16,7 +16,7 @@ class Vehicles(models.Model):
     brand = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     color = models.CharField(max_length=50)
-    license_plate = models.CharField(max_length=20, unique=True)
+    license_plate = models.CharField(max_length=20, unique=True, primary_key=True)
     insurance_policy = models.OneToOneField(
         "InsurancePolicy", on_delete=models.CASCADE, related_name="vehicle"
     )
