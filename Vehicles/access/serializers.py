@@ -1,5 +1,18 @@
 from rest_framework import serializers
 from .models import Vehicles, InsurancePolicy
+import re
+
+
+# Regex patterns for license plates for different vehicle types
+LICENSE_PLATE_PATTERNS = {
+    "auto": r"^[A-Z]{3}-\d{3}$",  # Example: ABC-123
+    "motocicleta": r"^[A-Z0-9]{5}$",  # Example: ABC12
+    "bicicleta": r"^[A-Z0-9]{4}$",  # Example: ABC1
+    "camioneta": r"^[A-Z]{2}-\d{3}-[A-Z]{2}$",  # Example: AB-123-CD
+    "yate": r"^[A-Z]{2}\d{4}$",  # Example: AB1234
+    "velero": r"^[A-Z]{3}-\d{2}$",  # Example: ABC-12
+    "otro": r".*",
+}
 
 
 class InsurancePolicySerializer(serializers.ModelSerializer):
@@ -54,3 +67,15 @@ class VehiclesSerializer(serializers.ModelSerializer):
         insurance_policy.save()
 
         return instance
+
+    def validate_license_plate(self, value):
+        return value.upper()
+
+    def validate(self, data):
+        pattern = LICENSE_PLATE_PATTERNS.get(data["vehicle_type"])
+
+        if not re.match(pattern, data["license_plate"]):
+            raise serializers.ValidationError(
+                "Invalid license plate format for the given vehicle type."
+            )
+        return data

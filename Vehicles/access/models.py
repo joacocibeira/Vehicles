@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class Vehicles(models.Model):
@@ -28,3 +29,12 @@ class Vehicles(models.Model):
 class InsurancePolicy(models.Model):
     company_name = models.CharField(max_length=100)
     expiration_date = models.DateField()
+
+    def clean(self):
+        # Check if the expiration_date is in the correct format
+        date_format = "%d-%m-%Y"
+        expiration_date_str = self.expiration_date.strftime(date_format)
+        if expiration_date_str != self.expiration_date:
+            raise ValidationError(
+                {"expiration_date": "Expiration date must be in the format DD-MM-YYYY."}
+            )
