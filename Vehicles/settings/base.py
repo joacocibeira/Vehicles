@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # My apps
     "Vehicles.access",
+    "Vehicles.authentication",
 ]
 
 MIDDLEWARE = [
@@ -120,6 +121,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
 }
 
-SPECTACULAR_SETTINGS = {"TITLE": "Vehicle access"}
+SPECTACULAR_SETTINGS = {"TITLE": "Vehicle access", "VERSION": "1.0.1"}

@@ -1,10 +1,11 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework import viewsets
 from .models import Vehicles
 from .serializers import VehiclesSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 class VehiclesViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
 
     queryset = Vehicles.objects.all()
     serializer_class = VehiclesSerializer

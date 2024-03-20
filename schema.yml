@@ -56,9 +56,6 @@ paths:
   /api/vehicles/{license_plate}/:
     get:
       operationId: api_vehicles_retrieve
-      description: |-
-        Retrieve a model instance by vehicle type and license plate instead of the
-        PK
       parameters:
       - in: path
         name: license_plate
