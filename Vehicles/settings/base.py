@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # External packages
     "rest_framework",
     # My apps
+    "Vehicles.access",
 ]
 
 MIDDLEWARE = [
