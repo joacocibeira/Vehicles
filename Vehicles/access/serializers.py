@@ -17,26 +17,21 @@ LICENSE_PLATE_PATTERNS = {
 
 
 class InsurancePolicySerializer(serializers.ModelSerializer):
-    expiration_date = serializers.DateTimeField(
-        required=False,
-        allow_null=True,
-        format="%d-%m-%Y",  # Specify the desired date format
-        input_formats=["%d-%m-%Y"],  # Add the input format for parsing
+    expiration_date = serializers.DateField(
+        format="%d-%m-%Y", input_formats=["%d-%m-%Y", "%m-%d-%Y", "%Y-%m-%d"]
     )
 
     def validate_expiration_date(self, value):
+        # Get today's date
         today = timezone.now().date()
-        if value and value.date() <= today + timezone.timedelta(days=30):
+        # Calculate the date one month from now
+        one_month_from_now = today + timezone.timedelta(days=30)
+        # Check if the expiration date is at least one month from now
+        if value <= one_month_from_now:
             raise serializers.ValidationError(
-                "Insurance policy must expire at least a month from now"
+                "Expiration date must be at least a month from now."
             )
         return value
-
-    def validate(self, data):
-        # Ensure expiration date is in the desired format
-        if "expiration_date" in data:
-            data["expiration_date"] = data["expiration_date"].strftime("%d-%m-%Y")
-        return data
 
     class Meta:
         model = InsurancePolicy
