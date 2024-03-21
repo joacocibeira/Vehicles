@@ -1,14 +1,17 @@
 from rest_framework import viewsets
-from .models import Vehicles
-from .serializers import VehiclesSerializer
 from rest_framework.permissions import IsAuthenticated
+from .models import Vehicles
+from .serializers import VehiclesSerializer, VehicleUpdateSerializer
 
 
 class VehiclesViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-
     queryset = Vehicles.objects.all()
-    serializer_class = VehiclesSerializer
+
+    def get_serializer_class(self):
+        if self.action == "partial_update":
+            return VehicleUpdateSerializer
+        return VehiclesSerializer
 
     def get_queryset(self):
         """
