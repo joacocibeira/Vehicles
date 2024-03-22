@@ -25,7 +25,7 @@ load_dotenv()
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG")
 
 
 # Application definition
@@ -127,3 +127,19 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {"TITLE": "Vehicle access", "VERSION": "1.0.1"}
+
+
+# Define databases
+# Database settings
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
+    }
+}
+
+ALLOWED_HOSTS = ["*"]
