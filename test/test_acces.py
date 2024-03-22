@@ -24,7 +24,6 @@ def test_vehicle_list(user, api_client):
     list_url = reverse("vehicles-list")
     response = api_client.get(path=list_url)
 
-    # Assert statements or other test logic here
     assert response.status_code == 200
     assert response.data["count"] == 5  # Check that the response contains 5 vehicles
 
@@ -46,7 +45,6 @@ def test_vehicle_retrieve(user, api_client):
     list_url = reverse("vehicles-list") + f"{vehicle.license_plate}/"
     response = api_client.get(path=list_url)
 
-    # Assert statements or other test logic here
     assert response.status_code == 200
 
 
@@ -125,7 +123,7 @@ def test_vehicle_create_should_fail(user, api_client):
     # Assert statements
     assert (
         response.status_code == 400
-    )  # Check that the response status is 201 (Created)
+    )  # Check that the response status is 400 (Not created)
 
     with pytest.raises(ObjectDoesNotExist):
         Vehicles.objects.get(license_plate="ABC-123")
