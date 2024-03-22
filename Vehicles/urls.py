@@ -14,9 +14,29 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from Vehicles.access import views
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework_simplejwt import views as jwt_views
+
+
+router = DefaultRouter()
+
+router.register(r"vehicles", views.VehiclesViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("authentication/", include("Vehicles.authentication.urls")),
+    path("api/", include(router.urls)),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("schema/docs/", SpectacularSwaggerView.as_view(url_name="schema")),
+    path(
+        "api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"
+    ),
+    path(
+        "api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"
+    ),
 ]
