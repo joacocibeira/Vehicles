@@ -9,7 +9,7 @@ The Vehicles App is a web-based application designed to help users monitor and m
    git clone https://github.com/joacocibeira/Vehicles
 ```
 
-1. Build and compose the image with Docker
+2. Build and compose the image with Docker
 
 ```bash
    docker-compose up -d --build
