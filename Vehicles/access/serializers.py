@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Vehicles, InsurancePolicy
 import re
+from django.utils import timezone
 
 
 # Regex patterns for license plates for different vehicle types
@@ -16,7 +17,21 @@ LICENSE_PLATE_PATTERNS = {
 
 
 class InsurancePolicySerializer(serializers.ModelSerializer):
-    expiration_date = serializers.DateField(format="%d-%m-%Y")
+    expiration_date = serializers.DateField(
+        format="%d-%m-%Y", input_formats=["%d-%m-%Y", "%m-%d-%Y", "%Y-%m-%d"]
+    )
+
+    def validate_expiration_date(self, value):
+        # Get today's date
+        today = timezone.now().date()
+        # Calculate the date one month from now
+        one_month_from_now = today + timezone.timedelta(days=30)
+        # Check if the expiration date is at least one month from now
+        if value <= one_month_from_now:
+            raise serializers.ValidationError(
+                "Expiration date must be at least a month from now."
+            )
+        return value
 
     class Meta:
         model = InsurancePolicy
@@ -90,3 +105,37 @@ class VehiclesSerializer(serializers.ModelSerializer):
                 "Invalid license plate format for the given vehicle type."
             )
         return data
+
+
+class VehicleUpdateSerializer(serializers.ModelSerializer):
+    """Vehicle type and License plate fields are inmutable during the lifespan of a
+    vehicle so we need a different serializer for partial updates"""
+
+    insurance_policy = InsurancePolicySerializer(required=False)
+
+    class Meta:
+        model = Vehicles
+        fields = [
+            "brand",
+            "model",
+            "color",
+            "insurance_policy",
+        ]
+
+    def update(self, instance, validated_data):
+        # Retrieve insurance_policy data if present in validated_data
+        insurance_policy_data = validated_data.pop("insurance_policy", None)
+
+        # Update vehicle fields
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        # Update insurance_policy fields if data is provided
+        if insurance_policy_data:
+            insurance_policy = instance.insurance_policy
+            for key, value in insurance_policy_data.items():
+                setattr(insurance_policy, key, value)
+            insurance_policy.save()
+
+        instance.save()
+        return instance
