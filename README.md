@@ -8,8 +8,9 @@ The Vehicles App is a web-based application designed to help users monitor and m
 ```bash
    git clone https://github.com/joacocibeira/Vehicles
 ```
+2. Rename the .env_sample file to .env and edit the variables
 
-2. Build and compose the image with Docker
+3. Build and compose the image with Docker
 
 ```bash
    docker-compose up -d --build
